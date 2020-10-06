@@ -25,7 +25,7 @@ $("#startSort").click(function(){
           break;
           case "merge":
             setSortButtonVisibilities(true);
-            mergeSort(unsortedArray);
+            mergeSort(unsortedArrayDoubleDimension);
           break;
         default:
         {

@@ -1,5 +1,6 @@
 var arraySize;
-var unsortedArray = [];
+var unsortedArrayDoubleDimension = [];
+var unsortedArray= [];
 //bubble sort
 var outerIndex = 0;
 var innerIndex = 0;
@@ -21,13 +22,14 @@ $(document).ready(function()
 function createRandomIntArray(maxNumber,totalNumbers){
     $(".numbers").html("");
    arraySize =  totalNumbers;
-   unsortedArray = [];
+   unsortedArray,unsortedArray = [];
    var possibleWidth = $(window).width();
    var singleNumberWidth = (possibleWidth - (2.08 * arraySize)) / arraySize;
    for(var i=0;i<arraySize;i++)
    {
         var randomNumber = Math.floor(Math.random() * maxNumber);
-        unsortedArray.push({randomNumber,i});
+        unsortedArrayDoubleDimension.push({randomNumber,i});
+        unsortedArray.push(randomNumber);
         var divForGeneratedNumber = document.createElement( "div" );
         var calculatedHeight = calculateHeightForNumber(randomNumber,maxNumber);
         $(divForGeneratedNumber).css("height",calculatedHeight).css("width",singleNumberWidth+"px").attr("order",i).attr("id",randomNumber).addClass("numberDiv").addClass("number"+i);
@@ -127,8 +129,6 @@ async function heapify(arraySize, i) {
        var swap = unsortedArray[i];
        unsortedArray[i] = unsortedArray[largest];
        unsortedArray[largest] = swap;
-       console.log(i,"i");
-       console.log(largest,"largest");
        swapTwo(parseInt(i),parseInt(largest));
        heapify(arraySize, largest);
        
