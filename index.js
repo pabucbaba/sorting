@@ -9,7 +9,11 @@ var inc;
 var interval;
 var i, j, inc, temp;
 //shell sort end
+//heap sort start
+
+//heap sort end
 var abort = false;
+var needNewArray = false;
 $(document).ready(function()
 {
     createRandomIntArray(1000,500);
@@ -30,8 +34,48 @@ function createRandomIntArray(maxNumber,totalNumbers){
         $(".numbers").append($(divForGeneratedNumber));
    }
    inc = parseInt(unsortedArray.length/2);
+   needNewArray = false;
 }
-
+async function heapSort()
+{
+    
+    for (i = inc-1; i >= 0; i--)
+    {
+        
+        await heapify(unsortedArray.length,i);
+        await timer(0);
+    }
+    for (var z = unsortedArray.length-1; z >= 0; z--)
+    {
+        j = unsortedArray[parseInt(z)];
+        unsortedArray[parseInt(z)] = unsortedArray[0];
+        unsortedArray[0] = j;
+        await swapTwo(0,parseInt(z));
+        await heapify(z, 0);
+        await timer(0);        
+    }
+   
+}
+async function heapify(arraySize, i) {
+    var largest = i;
+    var left = 2*i + 1;
+    var right = 2*i + 2;
+    if (left < arraySize && unsortedArray[left] > unsortedArray[largest])
+    largest = left;
+    if (right < arraySize && unsortedArray[right] > unsortedArray[largest])
+    largest = right;
+    if (largest != i) {
+       var swap = unsortedArray[i];
+       unsortedArray[i] = unsortedArray[largest];
+       unsortedArray[largest] = swap;
+       console.log(i,"i");
+       console.log(largest,"largest");
+       swapTwo(parseInt(i),parseInt(largest));
+       heapify(arraySize, largest);
+       
+    }
+    
+ }
  async function shellSort()
  {
     while (inc >= 1 && !abort)
@@ -59,7 +103,8 @@ function createRandomIntArray(maxNumber,totalNumbers){
     setSortButtonVisibilities(false);
     console.log(unsortedArray);
  }  
-function swapTwo(firstIndex,secondIndex)
+
+async function swapTwo(firstIndex,secondIndex)
 {
     var nextNumberDiv = $("[order="+(parseInt(secondIndex))+"]");
     var currentNumberDiv = $("[order="+(parseInt(firstIndex))+"]");

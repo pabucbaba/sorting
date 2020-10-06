@@ -3,6 +3,11 @@ function adjustArray(value)
     createRandomIntArray(1000,value)
 }
 $("#startSort").click(function(){
+    if(needNewArray)
+    {
+        alert("Please create new array before attempting new sort operation.");
+        return;
+    }
    $("#stopSort").show();
     var selectedSort = $("#cbSortingAlgorithm").val();
     switch(selectedSort) {
@@ -14,6 +19,10 @@ $("#startSort").click(function(){
             setSortButtonVisibilities(true);
             shellSort();
           break;
+        case "heap":
+            setSortButtonVisibilities(true);
+            heapSort();
+          break;
         default:
         {
             setSortButtonVisibilities(false);
@@ -23,6 +32,7 @@ $("#startSort").click(function(){
 });
 $("#stopSort").click(function(){
     abort = true;
+    needNewArray = true;
     setSortButtonVisibilities(false);
 });
 function setSortButtonVisibilities(isSorting)
