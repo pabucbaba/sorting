@@ -27,7 +27,7 @@ function createRandomIntArray(maxNumber,totalNumbers){
    for(var i=0;i<arraySize;i++)
    {
         var randomNumber = Math.floor(Math.random() * maxNumber);
-        unsortedArray.push(randomNumber);
+        unsortedArray.push({randomNumber,i});
         var divForGeneratedNumber = document.createElement( "div" );
         var calculatedHeight = calculateHeightForNumber(randomNumber,maxNumber);
         $(divForGeneratedNumber).css("height",calculatedHeight).css("width",singleNumberWidth+"px").attr("order",i).attr("id",randomNumber).addClass("numberDiv").addClass("number"+i);
@@ -35,13 +35,67 @@ function createRandomIntArray(maxNumber,totalNumbers){
    }
    inc = parseInt(unsortedArray.length/2);
    needNewArray = false;
+  
 }
+
+ async function mergeSort (unsortedArray) {
+    await timer(0);
+    // No need to sort the array if the array only has one element or empty
+    if (unsortedArray.length <= 1) {
+      return unsortedArray;
+    }
+    // In order to divide the array in half, we need to figure out the middle
+    const middle = Math.floor(unsortedArray.length / 2);
+  
+    // This is where we will be dividing the array into left and right
+    const left = unsortedArray.slice(0, middle);
+    const right = unsortedArray.slice(middle);
+  
+    // Using recursion to combine the left and right
+    return await merge(
+      await mergeSort(left),await mergeSort(right)
+    );
+  }
+// Merge the two arrays: left and right
+async function merge (left, right) {
+    let resultArray = [], leftIndex = 0, rightIndex = 0;
+   
+    // We will concatenate values into the resultArray in order
+    while (leftIndex < left.length && rightIndex < right.length) {
+      
+        var rightIndexCount = left.length + rightIndex;
+      if (left[leftIndex] != undefined && left[leftIndex].randomNumber < right[rightIndex].randomNumber) {
+        var numberToPush = left[leftIndex].randomNumber;
+        var indexToPush = left[leftIndex].i;
+       
+        resultArray.push({randomNumber:numberToPush,i:indexToPush});
+        moveDivPosition(indexToPush,resultArray.length-1);
+
+        await timer(0);
+        leftIndex++; // move left array cursor
+      } else {
+        var numberToPush = right[rightIndex].randomNumber;
+        var indexToPush = right[rightIndex].i;
+        resultArray.push({randomNumber:numberToPush,i:indexToPush});
+        moveDivPosition(indexToPush,resultArray.length-1);
+        await timer(0);
+        
+        rightIndex++; // move right array cursor
+      }
+      
+    }
+  
+    // We need to concat here because there will be one element remaining
+    // from either left OR the right
+    return resultArray
+            .concat(left.slice(leftIndex))
+            .concat(right.slice(rightIndex));
+  }
+ 
 async function heapSort()
 {
-    
     for (i = inc-1; i >= 0; i--)
     {
-        
         await heapify(unsortedArray.length,i);
         await timer(0);
     }
@@ -54,7 +108,7 @@ async function heapSort()
         await heapify(z, 0);
         await timer(0);        
     }
-   
+    setSortButtonVisibilities(false);
 }
 async function heapify(arraySize, i) {
     var largest = i;
@@ -103,7 +157,18 @@ async function heapify(arraySize, i) {
     setSortButtonVisibilities(false);
     console.log(unsortedArray);
  }  
-
+ async function moveDivPosition(indexToMove,positionToMove)
+  {
+    var divToMove = $("[order="+(parseInt(indexToMove))+"]");
+    $(divToMove).insertBefore($(".numbers>div:eq("+positionToMove+")"));
+    $(divToMove).animate({
+        backgroundColor: 'red'
+    }, 10, function() {
+        $(divToMove).animate({
+            backgroundColor:'blue'
+        });
+    });
+  }
 async function swapTwo(firstIndex,secondIndex)
 {
     var nextNumberDiv = $("[order="+(parseInt(secondIndex))+"]");
@@ -113,7 +178,7 @@ async function swapTwo(firstIndex,secondIndex)
     $(nextNumberDiv).attr("order",firstIndex);
    
     $(currentNumberDiv).attr("order",(parseInt(secondIndex)));
-    $(currentNumberDiv)
+  
     var smallerNumberDivClone = nextNumberDiv.clone();
     var biggerNumberDivClone = currentNumberDiv.clone();
     nextNumberDiv.replaceWith(biggerNumberDivClone);

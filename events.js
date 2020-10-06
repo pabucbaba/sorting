@@ -23,6 +23,10 @@ $("#startSort").click(function(){
             setSortButtonVisibilities(true);
             heapSort();
           break;
+          case "merge":
+            setSortButtonVisibilities(true);
+            mergeSort(unsortedArray);
+          break;
         default:
         {
             setSortButtonVisibilities(false);
