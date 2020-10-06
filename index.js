@@ -56,6 +56,7 @@ function createRandomIntArray(maxNumber,totalNumbers){
             
             inc = parseInt(inc/2);
     }
+    setSortButtonVisibilities(false);
     console.log(unsortedArray);
  }  
 function swapTwo(firstIndex,secondIndex)
@@ -106,6 +107,7 @@ async function bubbleSort()
             await timer(0);
         }
     }
+    setSortButtonVisibilities(false);
 }
 function timer(ms) { return new Promise(res => setTimeout(res, ms)); }
 function calculateHeightForNumber(number,maximumNumber)
