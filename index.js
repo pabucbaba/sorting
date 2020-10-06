@@ -4,6 +4,7 @@ var unsortedArray= [];
 //bubble sort
 var outerIndex = 0;
 var innerIndex = 0;
+var animatingCount = 0;
 //bubble sort end
 //shell sort
 var inc;
@@ -21,27 +22,74 @@ $(document).ready(function()
 });
 function createRandomIntArray(maxNumber,totalNumbers){
     $(".numbers").html("");
-   arraySize =  totalNumbers;
-   unsortedArray,unsortedArray = [];
-   var possibleWidth = $(window).width();
-   var singleNumberWidth = (possibleWidth - (2.08 * arraySize)) / arraySize;
-   for(var i=0;i<arraySize;i++)
-   {
-        var randomNumber = Math.floor(Math.random() * maxNumber);
-        unsortedArrayDoubleDimension.push({randomNumber,i});
-        unsortedArray.push(randomNumber);
-        var divForGeneratedNumber = document.createElement( "div" );
-        var calculatedHeight = calculateHeightForNumber(randomNumber,maxNumber);
-        $(divForGeneratedNumber).css("height",calculatedHeight).css("width",singleNumberWidth+"px").attr("order",i).attr("id",randomNumber).addClass("numberDiv").addClass("number"+i);
-        $(".numbers").append($(divForGeneratedNumber));
-   }
-   inc = parseInt(unsortedArray.length/2);
-   needNewArray = false;
-  
+    arraySize =  totalNumbers;
+    unsortedArray,unsortedArray = [];
+    var possibleWidth = $(window).width();
+    var singleNumberWidth = (possibleWidth - (2.08 * arraySize)) / arraySize;
+    for(var i=0;i<arraySize;i++)
+    {
+            var randomNumber = Math.floor(Math.random() * maxNumber);
+            unsortedArrayDoubleDimension.push({randomNumber,i});
+            unsortedArray.push(randomNumber);
+            var divForGeneratedNumber = document.createElement( "div" );
+            var calculatedHeight = calculateHeightForNumber(randomNumber,maxNumber);
+            $(divForGeneratedNumber).css("height",calculatedHeight).css("width",singleNumberWidth+"px").attr("order",i).attr("id",randomNumber).addClass("numberDiv").addClass("number"+i);
+            $(".numbers").append($(divForGeneratedNumber));
+    }
+    inc = parseInt(unsortedArray.length/2);
+    needNewArray = false;
+}
+
+async function swap(leftIndex, rightIndex){
+    var temp = unsortedArray[leftIndex];
+    unsortedArray[leftIndex] = unsortedArray[rightIndex];
+    unsortedArray[rightIndex] = temp;
+    await swapTwo(parseInt(leftIndex),parseInt(rightIndex));
+}
+async function partition(left, right) {
+    var pivot   = unsortedArray[Math.floor((right + left) / 2)], //middle element
+        i       = left, //left pointer
+        j       = right; //right pointer
+    while (i <= j) {
+        while (unsortedArray[i] < pivot) {
+            i++;
+        }
+        while (unsortedArray[j] > pivot) {
+            j--;
+        }
+        if (i <= j) {
+            await timer(0);
+            await swap(i, j); //sawpping two elements
+            i++;
+            j--;
+        }
+    }
+    return i;
+}
+
+async function quickSort(left, right) {
+    var index;
+    animatingCount++
+    
+    if (unsortedArray.length > 1) {
+        index =  await partition(left, right); //index returned from partition
+        if (left < index - 1) { //more elements on the left side of the pivot
+             await quickSort(left, index - 1);
+             
+        }
+        if (index < right) { //more elements on the right side of the pivot
+             await quickSort(index, right);
+        }
+    }
+    animatingCount--;
+    if(animatingCount == 0)
+    {
+        setSortButtonVisibilities(false);
+    }
 }
 
  async function mergeSort (unsortedArray) {
-    await timer(0);
+  
     // No need to sort the array if the array only has one element or empty
     if (unsortedArray.length <= 1) {
       return unsortedArray;
@@ -164,7 +212,6 @@ async function heapify(arraySize, i) {
  async function moveDivPosition(indexToMove,positionToMove)
   {
     var divToMove = $("[order="+(parseInt(indexToMove))+"]");
-    $(divToMove).insertBefore($(".numbers>div:eq("+positionToMove+")"));
     $(divToMove).animate({
         backgroundColor: 'red'
     }, 10, function() {
@@ -172,6 +219,9 @@ async function heapify(arraySize, i) {
             backgroundColor:'blue'
         });
     });
+    await timer(0);
+    $(divToMove).insertBefore($(".numbers>div:eq("+positionToMove+")"));
+   
   }
 async function swapTwo(firstIndex,secondIndex)
 {

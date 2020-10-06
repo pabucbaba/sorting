@@ -27,6 +27,10 @@ $("#startSort").click(function(){
             setSortButtonVisibilities(true);
             mergeSort(unsortedArrayDoubleDimension);
           break;
+          case "quick":
+            setSortButtonVisibilities(true);
+            quickSort(0,unsortedArray.length - 1);
+          break;
         default:
         {
             setSortButtonVisibilities(false);
