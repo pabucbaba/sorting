@@ -84,7 +84,12 @@ async function merge (left, right) {
       }
       
     }
-  
+    var checkIfEndedArray = resultArray
+    .concat(left.slice(leftIndex))
+    .concat(right.slice(rightIndex));
+    
+    if(checkIfEndedArray.length ==arraySize )
+        setSortButtonVisibilities(false);
     // We need to concat here because there will be one element remaining
     // from either left OR the right
     return resultArray
@@ -155,7 +160,6 @@ async function heapify(arraySize, i) {
             inc = parseInt(inc/2);
     }
     setSortButtonVisibilities(false);
-    console.log(unsortedArray);
  }  
  async function moveDivPosition(indexToMove,positionToMove)
   {
