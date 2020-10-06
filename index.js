@@ -23,7 +23,7 @@ $(document).ready(function()
 function createRandomIntArray(maxNumber,totalNumbers){
     $(".numbers").html("");
     arraySize =  totalNumbers;
-    unsortedArray,unsortedArray = [];
+    unsortedArray,unsortedArrayDoubleDimension = [];
     var possibleWidth = $(window).width();
     var singleNumberWidth = (possibleWidth - (2.08 * arraySize)) / arraySize;
     for(var i=0;i<arraySize;i++)
