@@ -1,0 +1,16 @@
+.numberDiv
+{
+    color:white;
+    float:left;
+    margin-right:2px;    
+    background-color:blue;
+}
+.current
+{
+    background-color:green !important;
+    padding-right:5px;
+}
+.done
+{
+    background-color:palevioletred;
+}
