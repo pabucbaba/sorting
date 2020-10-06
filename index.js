@@ -9,15 +9,17 @@ var inc;
 var interval;
 var i, j, inc, temp;
 //shell sort end
+var abort = false;
 $(document).ready(function()
 {
     createRandomIntArray(1000,500);
 });
 function createRandomIntArray(maxNumber,totalNumbers){
-   arraySize =  Math.floor(Math.random() * totalNumbers);
+    $(".numbers").html("");
+   arraySize =  totalNumbers;
    unsortedArray = [];
    var possibleWidth = $(window).width();
-   var singleNumberWidth = (possibleWidth - (4 * arraySize)) / arraySize;
+   var singleNumberWidth = (possibleWidth - (2.08 * arraySize)) / arraySize;
    for(var i=0;i<arraySize;i++)
    {
         var randomNumber = Math.floor(Math.random() * maxNumber);
@@ -28,20 +30,17 @@ function createRandomIntArray(maxNumber,totalNumbers){
         $(".numbers").append($(divForGeneratedNumber));
    }
    inc = parseInt(unsortedArray.length/2);
-   console.log(unsortedArray);
-   shellSort();
-   //bubbleSort();
 }
 
  async function shellSort()
  {
-    while (inc >= 1)
+    while (inc >= 1 && !abort)
     {
         for (i = 0; i < arraySize; i++)
             {
                 j = i;
                 temp = unsortedArray[i];
-                while ((j >= inc) && (unsortedArray[j - inc] > temp))
+                while ((j >= inc) && (unsortedArray[j - inc] > temp) && !abort)
                 {
                     
                     swapTwo(j,j-inc);
@@ -56,7 +55,6 @@ function createRandomIntArray(maxNumber,totalNumbers){
             }
             
             inc = parseInt(inc/2);
-                console.log(inc);
     }
     console.log(unsortedArray);
  }  
@@ -95,8 +93,8 @@ async function bubbleSort()
     {
         for(innerIndex = 0;innerIndex<unsortedArray.length-outerIndex-1;innerIndex++)
         {
-            $("[order="+(parseInt(innerIndex-1))+"]").removeClass("current");
-            $("[order="+(parseInt(innerIndex))+"]").addClass("current");
+            if(abort)
+                return;
             var nextNumberDiv = $("[order="+(parseInt(innerIndex)+1)+"]");
             var currentNumberDiv = $("[order="+(parseInt(innerIndex))+"]");
             var currentNumber = $(currentNumberDiv).attr("id");
@@ -107,9 +105,7 @@ async function bubbleSort()
             }
             await timer(0);
         }
-        $("[order="+(parseInt(innerIndex))+"]").addClass("done").removeClass("current");
     }
-    $("[order=0]").addClass("done").removeClass("current");
 }
 function timer(ms) { return new Promise(res => setTimeout(res, ms)); }
 function calculateHeightForNumber(number,maximumNumber)

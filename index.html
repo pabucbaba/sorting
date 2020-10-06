@@ -5,12 +5,32 @@
     <link rel="stylesheet" href="./index.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+
     <script src="./index.js"></script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 </head>
 <body>
+    <div class="header">
+        <div class="headerContainer">
+            <div class="headerItem">Sorting Algorithm</div>
+            <div class="headerItem">
+                <select id="cbSortingAlgorithm">
+                    <option value="-1">Select</option>
+                    <option value="bubble">Bubble Sort</option>
+                    <option value="shell">Shell Sort</option>
+                </select>
+            </div>
+            <div class="headerItem">Array Size</div>
+            <div class="headerItem">
+                <input type="range" min="200" max="850" value="450" class="slider" onchange="adjustArray(this.value)" id="rArraySize">
+            </div>
+            <div class="headerItem wrap"><input type="button" class="button" id="startSort" value="Sort"/><input type="button" class="button" id="stopSort" value="Stop Sort"/></div>
+        </div>
+    </div>
    <div class="numbers"></div>
+   <script src="./events.js"></script>
 </html>
